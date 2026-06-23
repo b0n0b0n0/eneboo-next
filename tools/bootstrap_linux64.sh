@@ -50,10 +50,21 @@ EOF
   exit 2
 fi
 
+cd "$ROOT"
+
+for patch_file in "$ROOT"/patches/legacy/*.patch; do
+  [[ -e "$patch_file" ]] || continue
+  if patch --dry-run -p1 < "$patch_file" >/dev/null 2>&1; then
+    echo "Applying $(basename "$patch_file")"
+    patch -p1 < "$patch_file"
+  else
+    echo "Skipping $(basename "$patch_file") (already applied or not applicable)"
+  fi
+done
+
 rm -rf "$PREFIX"
 mkdir -p "$PREFIX"
 
-cd "$ROOT"
 export BUILD_NUMBER="bootstrap-$(git rev-parse --short HEAD)"
 export MAKEFLAGS=""
 
