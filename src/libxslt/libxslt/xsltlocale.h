@@ -16,10 +16,21 @@
 #ifdef XSLT_LOCALE_XLOCALE
 
 #include <locale.h>
-#include <xlocale.h>
+/*
+ * glibc exposed the extended locale API through <locale.h> and removed the
+ * obsolete compatibility header <xlocale.h> in glibc 2.26.  Apple and some
+ * BSD systems still provide <xlocale.h>, so include it only when available.
+ */
+#if defined(__has_include)
+#  if __has_include(<xlocale.h>)
+#    include <xlocale.h>
+#  endif
+#elif !defined(__GLIBC__)
+#  include <xlocale.h>
+#endif
 
 #ifdef __GLIBC__
-/*locale_t is defined only if _GNU_SOURCE is defined*/
+/* locale_t is defined only if _GNU_SOURCE is defined */
 typedef __locale_t xsltLocale;
 #else
 typedef locale_t xsltLocale;
