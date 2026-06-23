@@ -1,0 +1,42 @@
+name: Source audit
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - modernization/bootstrap
+    paths:
+      - 'tools/audit_repository.sh'
+      - '.github/workflows/source-audit.yml'
+      - 'MODERNIZATION.md'
+
+permissions:
+  contents: read
+
+jobs:
+  audit-linux-x86_64:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Run source audit
+        run: bash tools/audit_repository.sh build/audit
+
+      - name: Show summary
+        run: |
+          cat build/audit/summary.txt
+          echo '--- build files ---'
+          head -n 200 build/audit/build-files.txt
+          echo '--- entry points ---'
+          cat build/audit/entry-points.txt
+
+      - name: Upload audit
+        uses: actions/upload-artifact@v4
+        with:
+          name: eneboo-source-audit-linux-x86_64
+          path: build/audit
+          if-no-files-found: error
+          retention-days: 30
