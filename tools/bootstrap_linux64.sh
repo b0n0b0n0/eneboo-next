@@ -62,6 +62,11 @@ for patch_file in "$ROOT"/patches/legacy/*.patch; do
   fi
 done
 
+# qmake stores selected CONFIG flags in generated Makefiles. Remove only the
+# project-level generated files so a previous -flfcgi build cannot leak into
+# the desktop bootstrap. Bundled third-party Makefiles are intentionally kept.
+rm -f "$ROOT/settings.pro" "$ROOT/Makefile" "$ROOT/src/Makefile" "$ROOT/src/flfcgi/Makefile"
+
 rm -rf "$PREFIX"
 mkdir -p "$PREFIX"
 
