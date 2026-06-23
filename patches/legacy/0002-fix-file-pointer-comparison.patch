@@ -1,0 +1,13 @@
+diff --git a/src/flmail/ssldevice.cpp b/src/flmail/ssldevice.cpp
+index b9c4e6d..0000000 100644
+--- a/src/flmail/ssldevice.cpp
++++ b/src/flmail/ssldevice.cpp
+@@ -660,7 +660,7 @@ bool SSLDevice::saveCertificate(const QString &path)
+ 
+     if (!filePath.isEmpty()) {
+       fpTest = fopen(filePath.ascii(), "w");
+-      if (fpTest > 0) {
++      if (fpTest != 0) {
+         int len = 0;
+ 
+         len = d->sslBase->PEM_write_X509(fpTest, d->x509);
