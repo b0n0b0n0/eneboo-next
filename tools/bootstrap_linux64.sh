@@ -45,7 +45,7 @@ sudo apt-get install -y \
   libx11-dev libxext-dev libxinerama-dev libxrender-dev libxrandr-dev \
   libxft-dev libfontconfig1-dev libfreetype6-dev \
   libjpeg-dev libpng-dev zlib1g-dev \
-  libpq-dev libssl-dev
+  libpq-dev libssl-dev libnsl-dev
 EOF
   exit 2
 fi
@@ -72,7 +72,6 @@ set +e
 bash ./build.sh \
   -prefix "$PREFIX" \
   -platform linux-g++-64 \
-  -flfcgi \
   -quick \
   -verbose \
   -single
